@@ -1,0 +1,3 @@
+[submodule "gradle-sample"]
+	path = gradle-sample
+	url = https://github.com/ufo22940268/gradle-sample.git
