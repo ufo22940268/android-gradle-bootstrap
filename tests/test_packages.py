@@ -14,15 +14,15 @@ class TestPackage:
 
     @classmethod
     def setup_class(cls):
-        subprocess.check_call(["rm", "-r", BS_PATH])
+        subprocess.call(["rm", "-r", BS_PATH])
     
     def test_packages(self):
-        packages.copy()
+        package_path = "com.hongbosb"
+        app_name = "hongbosb"
+        packages.customize(package_path, app_name);
         
         assert os.path.exists(BS_PATH)
-
-        package_path = "com.hongbosb"
-        packages.customize(package_path);
+        
         am = open(join(BS_PATH, "src/main/AndroidManifest.xml"))
         assert am.read().find(package_path) != -1
 
@@ -33,3 +33,7 @@ class TestPackage:
         main_act = open(join(BS_PATH, 'src/main/java/', "/".join(package_path.split('.')),
                              'MainActivity.java'))
         assert main_act.read().find('package ' + package_path) != -1
+        
+        #Check if app name is modified.
+        string_xml_file = open(join(BS_PATH, 'src/main/res/values/strings.xml'))
+        assert string_xml_file.read().find(app_name) != -1

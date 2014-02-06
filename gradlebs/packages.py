@@ -10,7 +10,14 @@ BS_PATH = '/tmp/gradle-sample'
 def copy():
     subprocess.check_call(["cp", "-rf", "gradle-sample", "/tmp"])
 
-def customize(package_name = "com.test"):
+def customize(package_name = "com.test", app_name = 'example'):
+    #init
+    subprocess.call(["rm", "-r", BS_PATH])
+    
+    #copy sample project to tmp
+    copy()
+
+    #customize
     with open(join(BS_PATH, "src/main/AndroidManifest.xml"), "r") as am:
         soup = BeautifulSoup(am);
         soup.find("manifest")['package'] = package_name
@@ -36,12 +43,22 @@ def customize(package_name = "com.test"):
         main_act.write(act_str)
         main_act.close()
 
+    #Replace app name
+    with open(join(BS_PATH, 'src/main/res/values/strings.xml'), 'r') as strings_file:
+        soup = BeautifulSoup(strings_file)
+        soup.find_all('string')[0].string = app_name
+        strings_str = soup.prettify()
+
+    with open(join(BS_PATH, 'src/main/res/values/strings.xml'), 'w') as strings_file:    
+        strings_file.write(strings_str)
+        
     #zip file
     zip_file_name = str(uuid.uuid4()) + ".zip"
     f = zipfile.ZipFile(join('gradlebs/static/public/zipfiles', zip_file_name),'w',zipfile.ZIP_DEFLATED) 
 
     for dirpath, dirnames, filenames in os.walk(BS_PATH): 
-        for filename in filenames: 
-            f.write(os.path.join(dirpath,filename)) 
+        for filename in filenames:
+            final_name = os.path.join(dirpath,filename)
+            f.write(final_name, final_name.replace('tmp', '')) 
     f.close()
     return zip_file_name

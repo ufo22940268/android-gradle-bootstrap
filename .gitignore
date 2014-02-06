@@ -37,3 +37,5 @@ env*
 
 .webassets-cache
 *.sublime-*
+/gradlebs/static/public/zipfiles/*
+/TAGS
