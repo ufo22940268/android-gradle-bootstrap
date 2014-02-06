@@ -5,7 +5,7 @@
 
 ## 如何生成android app
 
-* 进入[网站](http://biubiubiu.me/gradle.html)输入包名，应用名生成app
+* 进入[网站](http://biubiubiu.me/gradle.html)输入包名和应用名，生成app
 * 安装[gradle](http://www.gradle.org/)
 * `gradle build installDebug`
 
